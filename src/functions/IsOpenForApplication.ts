@@ -22,10 +22,9 @@ async function callSundhedDkPractitionerStatus() : Promise<void> {
 
         if(response.data.AabenForTilgang) {
             console.log('Open for applications sending notifications');
-            sendMail("ks@occasio.dk",response.data.Navn + " er åben for tilgang - skift læge på borger.dk",response.data.Navn + " er åben for tilgang!");
+            sendMail(process.env.emailreciver,response.data.Navn + " er åben for tilgang - skift læge på borger.dk",response.data.Navn + " er åben for tilgang!");
         }else{
             console.log('Not open for applications sending notifications');
-            sendMail("ks@occasio.dk",response.data.Navn + " er ikke åben for tilgang",response.data.Navn + " er ikke åben for tilgang!");
         }
     } catch (error) {
         console.log(error);
@@ -37,7 +36,7 @@ async function sendMail(email: string, content: string, subject: string): Promis
   sgMail.setApiKey(process.env.SENDGRID_KEY);
   const msg = {
     to: email, // Change to your recipient
-    from: 'noreply@vito.nu', // Change to your verified sender
+    from: { name: 'Læge notifyer', email: 'noreply@vito.nu'}, // Change to your verified sender
     subject: subject,
     text: content,
     //html: content,
