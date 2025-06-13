@@ -10,7 +10,7 @@ export async function IsOpenForApplication(myTimer: Timer, context: InvocationCo
 }
 
 app.timer('IsOpenForApplication', {
-    schedule: '* * * * *',
+    schedule: '0 7 * * *',
     handler: IsOpenForApplication
 });
 
