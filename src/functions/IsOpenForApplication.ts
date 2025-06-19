@@ -6,7 +6,7 @@ const sgMail = require('@sendgrid/mail');
 
 export async function IsOpenForApplication(myTimer: Timer, context: InvocationContext): Promise<void> {
     context.log('Timer function processed request.');
-    callSundhedDkPractitionerStatus();
+    callSundhedDkPractitionerStatus(context);
 }
 
 app.timer('IsOpenForApplication', {
@@ -14,17 +14,17 @@ app.timer('IsOpenForApplication', {
     handler: IsOpenForApplication
 });
 
-async function callSundhedDkPractitionerStatus() : Promise<void> {
+async function callSundhedDkPractitionerStatus(context: InvocationContext) : Promise<void> {
     try {
         const response = await axios
         .get<Practice>(process.env.URLForPractitioner);
         console.log(response);
 
         if(response.data.AabenForTilgang) {
-            console.log('Open for applications sending notifications');
+            context.log('Open for applications sending notifications');
             sendMail(process.env.emailreciver,response.data.Navn + " er åben for tilgang - skift læge på borger.dk",response.data.Navn + " er åben for tilgang!");
         }else{
-            console.log('Not open for applications sending notifications');
+            context.log('Not open for applications sending notifications');
         }
     } catch (error) {
         console.log(error);
